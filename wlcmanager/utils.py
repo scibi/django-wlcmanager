@@ -144,3 +144,9 @@ def compare_config(wlc1, wlc2):
         conf['errors'] = r.msg
 
     return configuration_parts
+
+def run_each_context(admin_site, request):
+    try:
+        return admin_site.each_context(request)
+    except TypeError as e: # Django 1.7
+        return admin_site.each_context()

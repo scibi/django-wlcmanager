@@ -11,7 +11,7 @@ from django.template.response import TemplateResponse
 
 
 from .models import WLC, AutoAccessPoint, AccessPoint, RadioProfile
-from .utils import compare_config, get_free_from_sequence
+from .utils import compare_config, get_free_from_sequence, run_each_context
 
 
 class WLCAdmin(admin.ModelAdmin):
@@ -67,7 +67,7 @@ class WLCAdmin(admin.ModelAdmin):
 
         context = dict(
             # Include common variables for rendering the admin template.
-            self.admin_site.each_context(request),
+            run_each_context(self.admin_site, request),
             # Anything else you want in the context...
             key=wlc_id,
             opts=self.model._meta,
@@ -89,7 +89,7 @@ class WLCAdmin(admin.ModelAdmin):
 
         context = dict(
             # Include common variables for rendering the admin template.
-            self.admin_site.each_context(request),
+            run_each_context(self.admin_site, request),
             # Anything else you want in the context...
             key=wlc_id,
             opts=self.model._meta,
