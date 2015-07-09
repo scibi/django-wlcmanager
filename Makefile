@@ -24,7 +24,7 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	flake8 wlcmanager tests
+	flake8 wlcmanager
 
 test:
 	python runtests.py
