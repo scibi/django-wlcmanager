@@ -27,13 +27,13 @@ lint:
 	flake8 wlcmanager tests
 
 test:
-	python runtests.py tests
+	python runtests.py
 
 test-all:
 	tox
 
 coverage:
-	coverage run --source wlcmanager runtests.py tests
+	coverage run --source wlcmanager runtests.py
 	coverage report -m
 	coverage html
 	open htmlcov/index.html

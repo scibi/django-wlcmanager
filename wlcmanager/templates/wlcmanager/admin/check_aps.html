@@ -1,0 +1,75 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_list %}
+
+{% block extrastyle %}
+  <!-- extrastyle -->
+  {{ media.css }}
+  <link rel="stylesheet" type="text/css" href="{% static "wlcmanager/css/check_aps.css" %}" />
+{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <!-- extrahead - media -->
+  <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+  {{media.js}}
+{% endblock %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; {% trans 'Check config' %} {{ wlc }} vs {{ master_wlc }}
+  </div>
+{% endblock %}
+
+
+{% block content %}
+<h1>WLC configuration comparision</h1>
+<table class="ap_list">
+  <tr><th>Number</th><th>Result</th><th>Name</th><th>Serial Number</th><th>Details</th><th>Action</th></tr>
+  {% for k,v in results.iteritems %}
+  <tr class="ap_status {{v.result}}">
+    <th>{{k}}</th>
+    <td class="status">{{v.result_verbose}}</td>
+    <td>{{v.name}}</td>
+    <td>{{v.serial_number}}</td>
+    <td>
+    {% if v.result == 'mismatch' %}
+      <table>
+        <tr>
+          <th>Attribute</th>
+          <th>WLC value</th>
+          <th>DB value</th>
+        </tr>
+      {% for k2,v2 in v.cmp_res.iteritems %}
+        {% if not v2.equal %}
+        <tr>
+          <th>{{ k2 }}</th>
+          <td>{{ v2.e_val }}</td>
+          <td>{{ v2.o_val }}</td>
+        </tr>
+        {% endif %}
+      {% endfor %}
+      </table>
+    {% endif %}
+    </td>
+    <td>
+    {% if v.result == 'unknown' %}
+      <form action="{% url 'admin:wlcmanager-delete-ap' wlc.pk %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" value="{{k}}" name="ap_number"/>
+        <button type="sumit">Delete AP {{k}}@{{wlc.name}}</button>
+      </form>
+    {% elif v.result == 'missing' or v.result == 'mismatch' %}
+      <form action="{% url 'admin:wlcmanager-save-ap' wlc.pk %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" value="{{k}}" name="ap_number"/>
+        <button type="sumit">Save AP {{k}}@{{wlc.name}}</button>
+      </form>
+    {% endif %}
+    </td>
+    </td>
+  </tr>
+  {% endfor %}
+{% endblock %}

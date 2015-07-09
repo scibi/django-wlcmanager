@@ -1,0 +1,13 @@
+table.ap_list {
+	width: 100%;
+}
+
+table.ap_list tr.ap_status.missing td.status {
+	background: red;
+}
+table.ap_list tr.ap_status.unknown td.status {
+	background: red;
+}
+table.ap_list tr.ap_status.mismatch td.status {
+	background: red;
+}

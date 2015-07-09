@@ -1,0 +1,10 @@
+{% extends "admin/change_list.html" %}
+{% block object-tools-items %}
+
+    {{ block.super }}
+
+    <li>
+        <a href="refresh/" class="grp-state-focus" class="addlink">Refresh list</a>
+    </li>
+
+{% endblock %}

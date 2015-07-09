@@ -1,0 +1,53 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_list %}
+
+{% block extrastyle %}
+  <!-- extrastyle -->
+  {{ media.css }}
+
+{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <!-- extrahead - media -->
+  <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+  {{media.js}}
+{% endblock %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; {% trans 'Check config' %} {{ wlc }} vs {{ master_wlc }}
+  </div>
+{% endblock %}
+
+
+{% block content %}
+  <h1>WLC configuration comparision</h1>
+  {% for result in results %}
+    <h2>{{result.name}} - {% if result.is_equal %}OK{% else %}There are some differences{% endif %}</h2>
+    <ul>
+      {% for error in result.errors %}
+        <li>{{error}}</li>
+      {% endfor %}
+    </ul>
+    <fieldset class="module collapse">
+      <h2>Details</h2>
+      <div>
+        <table>
+          <tr>
+            <th>{{wlc}}</th>
+            <th>{{master_wlc}}</th>
+          </tr>
+          <tr>
+            <td><pre>{{result.element1_raw}}</pre></td>
+            <td><pre>{{result.element2_raw}}</pre></td>
+            {# <td>{{result.html_diff|safe}}</td> #}
+          </tr>
+        </table>
+      </div>
+    </fieldset>
+  {% endfor %}
+{% endblock %}
