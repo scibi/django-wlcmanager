@@ -1,7 +1,16 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
+
 import sys
 
 try:
     from django.conf import settings
+
+    import django
+    print("Django version: {}".format(django.get_version()))
 
     settings.configure(
         DEBUG=True,
@@ -40,10 +49,10 @@ except ImportError:
 
 def run_tests(*test_args):
     if not test_args:
-        test_args = ['tests']
+        test_args = ['wlcmanager.tests']
 
     # Run tests
-    test_runner = NoseTestSuiteRunner(verbosity=1)
+    test_runner = NoseTestSuiteRunner(verbosity=2)
 
     failures = test_runner.run_tests(test_args)
 
