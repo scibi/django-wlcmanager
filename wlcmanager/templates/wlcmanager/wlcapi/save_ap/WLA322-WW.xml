@@ -1,0 +1,62 @@
+<DAP apnum="{{ ap.number }}" fingerprint="{{ ap.fingerprint }}"
+     model="{{ ap.model }}"  name="{{ ap.name }}" 
+     high-latency-mode="NO"
+     serial-id="{{ ap.serial_number }}" type="NG">
+  <AP-BOOTCONFIG boot-image=""/>
+  <AP-RADIO-TABLE>
+    <AP-RADIO slot="1"
+              antenna-mode="DUAL-BAND-3SS" antennatype="INTERNAL"
+      {% if ap.radio_1_channel == 0 %}
+              auto-config="YES"
+              channel="11"
+      {% else %}
+              auto-config="NO"
+              channel="{{ ap.radio_1_channel }}"
+      {% endif %}
+              designation="INDOOR"
+              enable="{% if ap.radio_1_enable %}YES{% else %}NO{% endif %}"
+              external-antennas="0" force-rebalance="NO"
+              load-balance-enable="YES" load-balance-group=""
+              max-tuned-power="default" min-tx-rate=""
+      {% if ap.radio_1_power == 0 %}
+              auto-power-config="YES"
+      {% else %}
+              auto-power-config="NO"
+              tx-power="{{ ap.radio_1_power }}"
+      {% endif %}
+              type="NG">
+      <RADIO-PROFILE-REF name="{{ ap.radio_1_profile }}"/>
+    </AP-RADIO>
+    <AP-RADIO
+              slot="2"
+              antenna-mode="DUAL-BAND-3SS" antennatype="INTERNAL"
+      {% if ap.radio_2_channel == 0 %}
+              auto-config="YES"
+              channel="36"
+      {% else %}
+              auto-config="NO"
+              channel="{{ ap.radio_2_channel }}"
+      {% endif %}
+              designation="INDOOR"
+              enable="{% if ap.radio_2_enable %}YES{% else %}NO{% endif %}"
+              external-antennas="0" force-rebalance="NO"
+              load-balance-enable="YES" load-balance-group=""
+              max-tuned-power="default" min-tx-rate=""
+      {% if ap.radio_2_power == 0 %}
+              auto-power-config="YES"
+      {% else %}
+              auto-power-config="NO"
+              tx-power="{{ ap.radio_2_power }}"
+      {% endif %}
+              type="NA">
+      <RADIO-PROFILE-REF name="{{ ap.radio_2_profile|default:"default" }}"/>
+    </AP-RADIO>
+  </AP-RADIO-TABLE>
+  <AP-ETHERNET-TABLE/>
+  <APINFO>
+    <APCONTACT/>
+    <APLOCATION/>
+    <APDESCRIPTION/>
+  </APINFO>    
+  <VLAN-PROFILE-REF name=""/>
+</DAP> 

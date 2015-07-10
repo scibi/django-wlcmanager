@@ -205,11 +205,13 @@ class RadioProfile(models.Model):
 class AccessPoint(models.Model):
     MODELS = (
         ('WLA321-WW', 'WLA321-WW'),
+        ('WLA322-WW', 'WLA322-WW'),
         ('MP_432', 'MP-432'),
     )
     RADIO_COUNT = {
         'MP_432': 2,
         'WLA321-WW': 1,
+        'WLA322-WW': 2,
     }
     number = models.IntegerField(primary_key=True)
     fingerprint = models.CharField(max_length=64)
