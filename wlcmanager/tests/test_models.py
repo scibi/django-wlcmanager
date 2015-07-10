@@ -45,7 +45,7 @@ class WLCTest(TestCase):
         wlc_class.assert_called_once_with(host='1.2.3.4',
                                           password='some_password',
                                           user='some_user')
-        wlc_class.open.assert_called_once()
+        instance.open.assert_called_once_with()
         self.assertIs(c, instance)
 
     def test_connection(self):
