@@ -37,6 +37,8 @@ setup(
     include_package_data=True,
     install_requires=[
     ],
+    dependency_links=['https://github.com/Juniper/py-jnpr-wlc/tarball/master#egg=py-jnpr-wlc-1.0']
+
     license="BSD",
     zip_safe=False,
     keywords='django-wlcmanager',
