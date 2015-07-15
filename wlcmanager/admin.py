@@ -46,6 +46,9 @@ class WLCAdmin(admin.ModelAdmin):
             url(r'save_ap/(?P<wlc_id>[0-9]+)',
                 self.admin_site.admin_view(self.save_ap_view),
                 name='wlcmanager-save-ap'),
+            url(r'save_aps/(?P<wlc_id>[0-9]+)',
+                self.admin_site.admin_view(self.save_many_aps_view),
+                name='wlcmanager-save-many-aps'),
         )
         return my_urls + urls
 
@@ -154,6 +157,35 @@ class WLCAdmin(admin.ModelAdmin):
             msg = "Error while saving AP {}@{}: {}"
             self.message_user(request, msg.format(ap_number, wlc, e),
                               level=messages.ERROR)
+        return HttpResponseRedirect(request.META["HTTP_REFERER"])
+
+    def save_many_aps_view(self, request, wlc_id):
+        if request.method != 'POST':
+            return HttpResponseNotAllowed(('POST',))
+
+        try:
+            wlc = WLC.objects.get(pk=wlc_id)
+        except WLC.DoesNotExist:
+            raise Http404
+
+        try:
+            ap_numbers = request.POST['ap_numbers'].strip(',').split(',')
+        except KeyError:
+            return HttpResponseBadRequest()
+
+        for ap_number in ap_numbers:
+            try:
+                ap = AccessPoint.objects.get(number__exact=ap_number)
+                #print("Zapisuje {}".format(ap))
+                wlc.save_ap(ap)
+            except AccessPoint.DoesNotExist:
+                msg = "AP {} not found"
+                self.message_user(request, msg.format(ap_number),
+                                  level=messages.ERROR)
+            except RuntimeError as e:
+                msg = "Error while saving AP {}@{}: {}"
+                self.message_user(request, msg.format(ap_number, wlc, e),
+                                  level=messages.ERROR)
         return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
     class Media(object):
