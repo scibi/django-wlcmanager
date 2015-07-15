@@ -173,6 +173,11 @@ class WLCAdmin(admin.ModelAdmin):
         except KeyError:
             return HttpResponseBadRequest()
 
+        if ap_numbers==['']:
+            msg = "AP list is empty"
+            self.message_user(request, msg, level=messages.ERROR)
+            ap_numbers=[]
+
         for ap_number in ap_numbers:
             try:
                 ap = AccessPoint.objects.get(number__exact=ap_number)

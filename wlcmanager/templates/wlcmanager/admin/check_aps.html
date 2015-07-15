@@ -73,12 +73,11 @@
   </tr>
   {% endfor %}
 </table>
-<!-- 
 <form action="{% url 'admin:wlcmanager-save-many-aps' wlc.pk %}" method="post">
   {% csrf_token %}
-  <input type="hidden" value="{% for k,v in results.iteritems %}{% if v.result == 'missing' or v.result == 'mismatch' %}{{k}},{% endif %}{% endfor %}" name="ap_numbers"/>
-  <button type="sumit">Save all APs @{{wlc.name}}</button>
-</form> -->
+  <input type="hidden" value="{% for k,v in results.iteritems %}{% if v.result == 'mismatch' %}{{k}},{% endif %}{% endfor %}" name="ap_numbers"/>
+  <button type="sumit">Save mismatch APs @{{wlc.name}}</button>
+</form>
 <form action="{% url 'admin:wlcmanager-save-many-aps' wlc.pk %}" method="post">
   {% csrf_token %}
   <input type="hidden" value="{% for k,v in results.iteritems %}{% if v.result == 'missing' %}{{k}},{% endif %}{% endfor %}" name="ap_numbers"/>
