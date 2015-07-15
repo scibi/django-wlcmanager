@@ -207,9 +207,11 @@ class AccessPoint(models.Model):
         ('WLA321-WW', 'WLA321-WW'),
         ('WLA322-WW', 'WLA322-WW'),
         ('MP_432', 'MP-432'),
+        ('MP-522', 'MP-522'),
     )
     RADIO_COUNT = {
         'MP_432': 2,
+        'MP-522': 2,
         'WLA321-WW': 1,
         'WLA322-WW': 2,
     }
