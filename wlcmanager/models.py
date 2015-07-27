@@ -77,6 +77,8 @@ class WLC(models.Model):
     def refresh_autoaps(self):
         self.autoaccesspoint_set.all().delete()
         for ap in self.get_auto_aps():
+            AutoAccessPoint.objects.filter(
+                serial_number__exact=ap['serial-id']).delete()
             self.autoaccesspoint_set.create(serial_number=ap['serial-id'],
                                             fingerprint=ap['fingerprint'],
                                             number=ap['dapnum'],

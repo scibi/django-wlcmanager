@@ -149,6 +149,37 @@ class WLCTest(TestCase):
         get_auto_aps.assert_called_once_with()
         self.assertEqual(self.wlc.autoaccesspoint_set.count(), 2)
 
+    def test_refresh_autoaps_duplicate_error(self):
+        # Test replicating #1
+        wlc2 = WLCFactory(name='WLC2', ip_address='1.2.3.5',
+                          username='some_user', password='some_password')
+
+        AutoAccessPointFactory(
+            serial_number='0123456789',
+            number=9999,
+            wlc=wlc2)
+
+        get_auto_aps = mock.MagicMock()
+        get_auto_aps.return_value = [
+            {'serial-id': '0123456789',
+             'fingerprint': 'aa:bb:cc:dd:ee:ff:01:23:45:67:89:ab:cd:ef:00:01',
+             'dapnum': '9999',
+             'model': 'MP_432',
+             'ip-addr': '10.11.12.13'},
+        ]
+        self.wlc.get_auto_aps = get_auto_aps
+
+        self.assertEqual(self.wlc.autoaccesspoint_set.count(), 0)
+        self.assertEqual(wlc2.autoaccesspoint_set.count(), 1)
+
+        self.wlc.refresh_autoaps()
+
+        self.wlc.autoaccesspoint_set.get(serial_number='0123456789')
+
+        get_auto_aps.assert_called_once_with()
+        self.assertEqual(self.wlc.autoaccesspoint_set.count(), 1)
+        self.assertEqual(wlc2.autoaccesspoint_set.count(), 0)
+
     def test_delete_ap(self):
         make_connection = mock.MagicMock()
         conn_instance = make_connection.return_value
