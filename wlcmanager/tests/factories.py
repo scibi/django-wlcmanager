@@ -61,3 +61,4 @@ class AccessPointFactory(factory.django.DjangoModelFactory):
     radio_2_channel = 0
     radio_2_power = 0
     radio_2_enable = True
+    high_latency = False

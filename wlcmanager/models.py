@@ -12,6 +12,12 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from jnpr import wlc as jnpr_wlc
 
+from django.conf import settings
+try:
+    HIGHLATENCY_DEFAULT = settings.WLCMANAGER_HIGHLATENCY_DEFAULT
+except AttributeError:
+    HIGHLATENCY_DEFAULT = False
+
 
 @python_2_unicode_compatible
 class WLC(models.Model):
@@ -222,6 +228,7 @@ class AccessPoint(models.Model):
     model = models.CharField(max_length=16, choices=MODELS)
     name = models.CharField(max_length=64, unique=True)
     serial_number = models.CharField(max_length=16, unique=True)
+    high_latency = models.BooleanField(default=HIGHLATENCY_DEFAULT)
     description = models.CharField(max_length=128)
     location = models.CharField(max_length=128)
     radio_1_profile = models.ForeignKey(RadioProfile, related_name='+')
@@ -254,6 +261,7 @@ class AccessPoint(models.Model):
             'model': self.model,
             'name': self.name,
             'serial-id': self.serial_number,
+            'high-latency-mode': 'YES' if self.high_latency else 'NO',
         }
         results = self.cmp_elem_attr(dap, attr_map, 'AP: {}')
 

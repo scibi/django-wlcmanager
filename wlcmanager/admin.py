@@ -275,7 +275,8 @@ class AccessPointAdmin(admin.ModelAdmin):
         (None, {
             'classes': ('wlcmanager_ap_form', ),
             'fields': ('number', 'fingerprint', 'model', 'name',
-                       'serial_number', 'description', 'location'),
+                       'serial_number', 'high_latency', 'description',
+                       'location'),
         }),
         ('Radio 1', {
             'classes': ('wlcmanager_ap_form', ),

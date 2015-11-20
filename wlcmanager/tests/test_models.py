@@ -329,6 +329,7 @@ class AccessPointTest(TestCase):
             number=1234,
             name='AP1234',
             model='MP_432',
+            high_latency=True,
             radio_1_channel=14,
             radio_1_power=7,
             radio_1_profile__name='default',
@@ -370,7 +371,8 @@ class AccessPointTest(TestCase):
     def test_compare(self):
         dap_xml = """
             <DAP apnum="4422" fingerprint="aa:bb:cc" model="MODEL_1"
-                 name="NAME_2" serial-id="123ABC" type="NG">
+                 name="NAME_2" serial-id="123ABC" type="NG"
+                 high-latency-mode="NO">
                 <AP-RADIO-TABLE>
                     <AP-RADIO slot="1" auto-config="NO" channel="3"
                               enable="YES" auto-power-config="NO" tx-power="6">
@@ -407,6 +409,11 @@ class AccessPointTest(TestCase):
         self.assertEqual(rv['AP: apnum'], {
             'e_val': '4422',
             'o_val': '1234',
+            'equal': False,
+        })
+        self.assertEqual(rv['AP: high-latency-mode'], {
+            'e_val': 'NO',
+            'o_val': 'YES',
             'equal': False,
         })
         self.assertEqual(rv['Radio 1: slot'], {
@@ -469,4 +476,4 @@ class AccessPointTest(TestCase):
             'o_val': 'prof_name',
             'equal': False,
         })
-        self.assertEqual(len(rv), 17)
+        self.assertEqual(len(rv), 18)

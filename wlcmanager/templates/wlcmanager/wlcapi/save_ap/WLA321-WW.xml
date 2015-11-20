@@ -1,6 +1,6 @@
 <DAP apnum="{{ ap.number }}" fingerprint="{{ ap.fingerprint }}"
      model="{{ ap.model }}"  name="{{ ap.name }}" 
-     high-latency-mode="NO"
+     high-latency-mode="{% if ap.high_latency %}YES{% else %}NO{% endif %}"
      serial-id="{{ ap.serial_number }}" type="NG">
   <AP-BOOTCONFIG boot-image=""/>
   <AP-RADIO-TABLE>
