@@ -181,7 +181,6 @@ class WLCAdmin(admin.ModelAdmin):
         for ap_number in ap_numbers:
             try:
                 ap = AccessPoint.objects.get(number__exact=ap_number)
-                #print("Zapisuje {}".format(ap))
                 wlc.save_ap(ap)
             except AccessPoint.DoesNotExist:
                 msg = "AP {} not found"
@@ -291,15 +290,11 @@ class AccessPointAdmin(admin.ModelAdmin):
     )
 
     def add_view(self, request, form_url='', extra_context=None):
-        print('add_view')
-        print(request.GET)
         try:
             auto_ap_sn = request.GET['auto_sn']
 
             auto_ap = AutoAccessPoint.objects.get(
                 serial_number__exact=auto_ap_sn)
-
-            print(auto_ap)
 
             used_numbers = AccessPoint.objects.values_list('number', flat=True)
 
@@ -317,7 +312,6 @@ class AccessPointAdmin(admin.ModelAdmin):
             msg = "There is no auto AP with S/N: {}"
             self.message_user(request, msg.format(auto_ap_sn),
                               level=messages.ERROR)
-        print(request.GET)
         return super(AccessPointAdmin, self).add_view(
             request, form_url=form_url, extra_context=extra_context)
 admin.site.register(AccessPoint, AccessPointAdmin)
