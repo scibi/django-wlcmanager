@@ -231,11 +231,13 @@ class AccessPoint(models.Model):
     high_latency = models.BooleanField(default=HIGHLATENCY_DEFAULT)
     description = models.CharField(max_length=128)
     location = models.CharField(max_length=128)
-    radio_1_profile = models.ForeignKey(RadioProfile, related_name='+')
+    radio_1_profile = models.ForeignKey(RadioProfile, related_name='+',
+                                        on_delete=models.PROTECT)
     radio_1_channel = models.IntegerField(default=0, help_text="0 = auto")
     radio_1_power = models.IntegerField(default=0, help_text="0 = auto")
     radio_1_enable = models.BooleanField(default=True)
     radio_2_profile = models.ForeignKey(RadioProfile, related_name='+',
+                                        on_delete=models.PROTECT,
                                         null=True, blank=True)
     radio_2_channel = models.IntegerField(default=0, null=True, blank=True)
     radio_2_power = models.IntegerField(default=0, null=True, blank=True)
