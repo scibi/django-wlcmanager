@@ -342,16 +342,34 @@ class AccessPointTest(TestCase):
     @mock.patch('wlcmanager.models.loader')
     def test_render_xml(self, loader):
         from django.template import Template
+
         tmpl = '<DAP model="{{ ap.model }}" name="{{ ap.name }}">'\
                '<SOME-TAG/></DAP>'
-        loader.get_template.return_value = Template(tmpl)
+        templates_config = [
+            {
+                'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                'DIRS': [],
+                'OPTIONS': {
+                    'debug': False,
+                    'loaders': [
+                        'django.template.loaders.filesystem.Loader',
+                        'django.template.loaders.app_directories.Loader',
+                        ],
+                    'context_processors': [
+                        ],
+                },
+            },
+        ]
 
-        xml = self.ap.render_xml()
+        with self.settings(TEMPLATES=templates_config):
+            loader.get_template.return_value = Template(tmpl)
 
-        loader.get_template.assert_called_once_with(
-            'wlcmanager/wlcapi/save_ap/MP_432.xml')
-        self.assertEqual(xml,
-                         '<DAP model="MP_432" name="AP1234"><SOME-TAG/></DAP>')
+            xml = self.ap.render_xml()
+
+            loader.get_template.assert_called_once_with(
+                'wlcmanager/wlcapi/save_ap/MP_432.xml')
+            self.assertEqual(xml,
+                             '<DAP model="MP_432" name="AP1234"><SOME-TAG/></DAP>')
 
     def test_clean(self):
         self.ap.clean()

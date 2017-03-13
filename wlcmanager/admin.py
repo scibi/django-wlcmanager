@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib import admin
 from django.contrib import messages
 from django.http import (HttpResponseRedirect, HttpResponseNotAllowed,
@@ -34,8 +34,7 @@ class WLCAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super(WLCAdmin, self).get_urls()
-        my_urls = patterns(
-            "",
+        my_urls = [
             url(r'compare_config/(?P<wlc_id>[0-9]+)',
                 self.admin_site.admin_view(self.compare_config_view)),
             url(r'check_aps/(?P<wlc_id>[0-9]+)',
@@ -49,7 +48,7 @@ class WLCAdmin(admin.ModelAdmin):
             url(r'save_aps/(?P<wlc_id>[0-9]+)',
                 self.admin_site.admin_view(self.save_many_aps_view),
                 name='wlcmanager-save-many-aps'),
-        )
+        ]
         return my_urls + urls
 
     def compare_config_view(self, request, wlc_id):
@@ -206,11 +205,10 @@ class AutoAccessPointAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super(AutoAccessPointAdmin, self).get_urls()
-        my_urls = patterns(
-            "",
+        my_urls = [
             url(r"^refresh/$", self.admin_site.admin_view(
                 self.refresh_autoaps)),
-        )
+        ]
         return my_urls + urls
 
     def create_ap_url(self, obj):
@@ -241,11 +239,10 @@ class RadioProfileAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super(RadioProfileAdmin, self).get_urls()
-        my_urls = patterns(
-            "",
+        my_urls = [
             url(r"^refresh/$", self.admin_site.admin_view(
                 self.refresh_profiles)),
-        )
+        ]
         return my_urls + urls
 
     def refresh_profiles(self, request):

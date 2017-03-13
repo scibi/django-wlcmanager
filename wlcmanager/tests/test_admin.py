@@ -53,6 +53,7 @@ class WLCAdminTest(TestCase):
     def test_compare_config_view_no_master_wlc(self):
         request = HttpRequest()
         request.user = AnonymousUser()
+        request.META['SCRIPT_NAME'] = None
         wlc = WLCFactory(master=False)
 
         response = self.wa.compare_config_view(request, wlc.id)
@@ -65,6 +66,7 @@ class WLCAdminTest(TestCase):
     def test_compare_config_view_compare_config_exception(self):
         request = HttpRequest()
         request.user = AnonymousUser()
+        request.META['SCRIPT_NAME'] = None
         wlc = WLCFactory(master=False)
         WLCFactory(master=True)  # Just generate one master
 
@@ -82,6 +84,7 @@ class WLCAdminTest(TestCase):
     def test_compare_config_view_ok(self):
         request = HttpRequest()
         request.user = AnonymousUser()
+        request.META['SCRIPT_NAME'] = None
         wlc = WLCFactory(master=False)
         master_wlc = WLCFactory(master=True)
 
@@ -104,6 +107,7 @@ class WLCAdminTest(TestCase):
     def test_check_aps_view_ok(self):
         request = HttpRequest()
         request.user = AnonymousUser()
+        request.META['SCRIPT_NAME'] = None
         wlc = WLCFactory(master=False)
 
         with mock.patch('wlcmanager.models.WLC.check_aps') \
